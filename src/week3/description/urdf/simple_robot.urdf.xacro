@@ -1,0 +1,55 @@
+<robot name="simple_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <link name="world"/>
+  <link name="base_link"> <!-- Each link should have a name to distinguish and refer to them -->
+    <visual>
+        <origin xyz="0 0 0.1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.2 0.2 0.2"/> <!-- This specifies the shape of the link -->
+      </geometry>
+      <material name="base_material"> <!-- You need to give a name to the material -->
+        <color rgba="0.5 0.5 0.5 1"/> <!-- This specifies the color of the link -->
+      </material>
+    </visual>
+  </link>
+
+  <link name="link_1">
+    <visual>
+        <origin xyz="0 0 0.3" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.6" radius="0.1"/> 
+      </geometry>
+      <material name="link1_material">
+        <color rgba="0 1 0 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="fixed" type="fixed"> <!-- it's a fixed frame because we do not want the base to move -->
+    <parent link="world"/>    <!-- parent, because in the chain sequence comes before the child -->
+    <child link="base_link"/> <!-- This is the child, connected by the joint to the parent -->
+  </joint>
+
+  <joint name="base_to_link_1" type="continuous"> <!-- Continuous, meaning it can rotate without upper/lower limits -->
+    <origin xyz="0 0 0.2" rpy="${pi/2} 0 0"/>
+    <axis xyz="0 1 0"/> 
+    <parent link="base_link"/>
+    <child link="link_2"/>
+  </joint>
+
+  <link name="link_2">
+    <visual>
+      <geometry>
+        <sphere radius="0.1"/> 
+      </geometry>
+      <material name="link2_material">
+        <color rgba="0 0 1 1"/>
+      </material>
+    </visual>
+  </link>
+
+    <joint name="link_1_to_link_2" type="continuous"> 
+    <parent link="link_2"/>    <!-- parent, because in the chain sequence comes before the child -->
+    <child link="link_1"/> <!-- This is the child, connected by the joint to the parent -->
+  </joint>
+
+</robot>
