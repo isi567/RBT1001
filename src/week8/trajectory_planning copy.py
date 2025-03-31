@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node
-from inverse_kinematics_analytic import compute_ik
-from direct_kinematics import compute_dk
+from inverse_kinematics_analytic_mimi import compute_ik
+from direct_kinematics_mimi import compute_dk
 from scipy.spatial.transform import Rotation
 import matplotlib.pyplot as plt
 import numpy as np

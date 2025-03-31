@@ -68,18 +68,18 @@ class IKClient(Node):
             self.compute_ik(P, R)
 
 
-    def compute_ik(self, current_P, current_R):
+    def compute_ik(self, P, R):
         if self.target_pose is None:
             return
         
         
         # 1. TODO: find Pw, the wrist position
         #    HINT: look at TF in rviz (visualiser) to check the axis direction of the end effector
-        Pw = 
+        Pw = P - 0.065 * R [:,2]
         print("Pw: ", Pw)
 
         # 2. TODO: find q1, the first joint angle
-        q1 = 
+        q1 = np.arctan2(Pw[1], Pw[0])
         print("Q1: ", q1)
 
         # 3. find Pw' the wrist position in the xy plane
@@ -95,46 +95,53 @@ class IKClient(Node):
         #           - Here you can find two solutions, one for elbow up and one for elbow down.
         #           - You can choose one at random, or use the one that is closest to the current joint state!
        
-        q3 =
+        c3 = (Pw_prime[0]**2 + Pw[1]**2 - 0.1**2 - 0.107**2) / (2 * 0.1 *0.107)
+        s3p = -np.sqrt(1-c3**2)
+        s3n = -np.sqrt(1-c3**2)
+        q3 = np.arctan2(s3n, c3)
         print("Q3: ", q3)
 
         # 5. TODO: find q2
-        q2 = 
+        q2 = np.arctan2(Pw_prime[0], Pw_prime[1])- np.arctan2(0.107 * np.sin(q3), 0.1 +0.107 * np.cos(q3))
         print("Q2: ", q2)
 
         # 6. The actual orientation of link2 and link3 in our robot is different than the one in the 2R problem analysed
         #    so, we need to adjust q2 and q3.
         #    HINT: look at the robot in rviz to understand the orientation of the links and how they differ from 2R axes
         q2 = -q2 - 3*np.pi/2.
-        q3 = -q3 - np.pi/2
+        q3 = -q3 - np.pi/2 # adjusts the 0 configuration 
 
         print("Q2 adjusted: ", q2)
         print("Q3 adjusted: ", q3)
 
-        # TODO: fill R0123
-        #       HINT: You have the analytical form for R0123 in the github wiki page
+        #TODO: fill R0123
+              #HINT: You have the analytical form for R0123 in the github wiki page
         R0123 = Rotation.from_matrix([
-            ...
+            [np.sin(q2 + q3) * np.cos(q1), np.cos(q1) * np.cos(q2 +q3), -np.sin(q1)],
+            [np.sin(q1) * np.sin(q2 + q3), np.sin(q1) * np.cos(q2 + q3), np.cos(q1)],
+            [np.cos(q2 +q3), -np.sin(q2 +q3), 0.]
+            
         ]).as_matrix()
         # TODO: compute R456
         #       HINT: - You have R0123
         #             - You have R0123456 (current_R)
         #             - how do you get R456? 
-        R456 = 
+        R456 = R0123.transpose() @ R
         
         # TODO: compute q4, q5, q6
         #       HINT: - You have the analytic form of R456 in the github wiki page
         #             - Remember to handle the singularity case
-        if ...:
+        # if ...:
             # non singular case
-            q5 = 
-            q4 = 
-            q6 = 
-        else:
+            
+        q4 = np.arctan2(R456[2,2], -R456[2,0]) # rows then columns
+        q5 = np.arccos(R456[1, 2])
+        q6 = np.arctan2(R456[1,0], R456[1,1])
+        # else:
             # Singluar case
-            q5 = 
-            q4 = 
-            q6 = 
+            # q5 = 0.
+            # q4 = 0.
+            # q6 = 0.
 
 
         print("Q4: ", q4)

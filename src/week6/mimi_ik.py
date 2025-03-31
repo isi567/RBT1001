@@ -9,80 +9,8 @@ from tf2_ros import TransformException
 from tf2_ros.buffer import Buffer
 from tf2_ros.transform_listener import TransformListener
 
-def compute_ik(target_P, target_R, elbow_up=True):
-    if target_P is None or target_R is None:
-        return None
-    
-    # 1. find Pw, the wrist position
-    Pw = target_P - 0.065 * target_R[:,2]
-    print("Pw: ", Pw)
 
-    # 2. find q1, the first joint angle
-    q1 = np.arctan2(Pw[1], Pw[0])
-
-    # 3. find Pw' the wrist position in the xy plane
-    Pw_prime = np.array([
-        np.linalg.norm(Pw[0:2]), 
-        Pw[2] - 0.136, 
-        0])
-
-    print("Pw_prime: ", Pw_prime)
-
-    print("Q1: ", q1)
-
-    # 4. find q3 
-    c3 = (Pw_prime[0]**2 + Pw_prime[1]**2 - 0.1**2 - 0.107 ** 2) / (2. * 0.1 * 0.107)
-    s3p = np.sqrt(1. - c3**2)
-    s3n = -np.sqrt(1. - c3**2) 
-
-    if elbow_up:
-        q3 = np.arctan2(s3n, c3)
-    else:
-        q3 = np.arctan2(s3p, c3)
-
-    # print(c3, s3p, s3n)
-    
-    
-    # # 5. find q2, elbow up and elbow down 
-    q2 = np.arctan2(Pw_prime[1], Pw_prime[0]) - np.arctan2(0.107 * np.sin(q3), 0.1 + 0.107 * np.cos(q3))
-
-    # when the actual angle is 0 the angle is pi/2
-    q2 = -q2 - 3*np.pi/2.
-
-    q3 = -q3  - np.pi/2.
-
-    print("Q2: ", q2)
-
-    print("Q3: ", q3)
-
-    # Now we know R0123 and R0123456, we can find R456
-    R0123 = Rotation.from_matrix([
-        [np.sin(q2+q3)*np.cos(q1), np.cos(q1)*np.cos(q2+q3), -np.sin(q1)],
-        [np.sin(q1)*np.sin(q2+q3) , np.sin(q1)*np.cos(q2+q3), np.cos(q1)],
-        [np.cos(q2+q3), -np.sin(q2+q3), 0]
-    ]).as_matrix()
-    R456 = R0123.T @ target_R
-
-    # ASSUMPTION: non-singluar case in which r23 /= +-1
-    # TODO: handle the singular case
-    q5 = np.arccos(R456[1, 2])
-    q4 = np.arctan2(R456[2, 2], -R456[0, 2])
-    q6 = np.arctan2(R456[1, 0], R456[1, 1])
-    
-    q6 = q6 - np.pi
-
-    print("Q4: ", q4)
-    print("Q5: ", q5)
-    print("Q6: ", q6)
-
-    # check that none of the angles are NaN
-    if np.isnan(q1) or np.isnan(q2) or np.isnan(q3) or np.isnan(q4) or np.isnan(q5) or np.isnan(q6):
-        return None
-    
-    return [q1, q2, q3, q4, q5, q6]
-
-
-class IK(Node):
+class IKClient(Node):
     def __init__(self):
         super().__init__('ik_analytic_client')
 
@@ -137,18 +65,92 @@ class IK(Node):
             pprint(P)
             print("R:")
             pprint(R)
-
-            # Compute the IK solution
             self.compute_ik(P, R)
 
-    def compute_ik(self, target_P, target_R,):
-        
-        q = compute_ik(self, target_P, target_R,)
 
-        if q is None:
+    def compute_ik(self, P, R):
+        if self.target_pose is None:
             return
         
-        q1, q2, q3, q4, q5, q6 = q
+        
+        # 1. TODO: find Pw, the wrist position
+        #    HINT: look at TF in rviz (visualiser) to check the axis direction of the end effector
+        Pw = P - R [:,2]
+        print("Pw: ", Pw)
+
+        # 2. TODO: find q1, the first joint angle
+        q1 = np.arctan2(Pw[1], Pw[0])
+        print("Q1: ", q1)
+
+        # 3. find Pw' the wrist position in the xy plane
+        #    HINT: this allows us to reduce the problem to a 2R planar robot problem for q2 and q3
+        Pw_prime = np.array([
+            np.linalg.norm(Pw[0:2]), 
+            Pw[2], 
+            0])
+        print("Pw_prime: ", Pw_prime)
+
+        # 4. TODO: find q3 
+        #    HINTs: - Use the cosine rule to find q3 (see lecture slides on IK).
+        #           - Here you can find two solutions, one for elbow up and one for elbow down.
+        #           - You can choose one at random, or use the one that is closest to the current joint state!
+       
+        #c3 = (Pw_prime[0]**2 + Pw[1]**2 - 0.1**2 - 0.107**2) / (2 * 0.1 *0.107)
+        #s3p = -np.sqrt(1-c3**2)
+        #s3n = -np.sqrt(1-c3**2)
+        q3 = Pw[2]
+        print("Q3: ", q3)
+
+        # 5. TODO: find q2
+        q2 = Pw[0]/np.cos(q1)
+        print("Q2: ", q2)
+
+        # 6. The actual orientation of link2 and link3 in our robot is different than the one in the 2R problem analysed
+        #    so, we need to adjust q2 and q3.
+        #    HINT: look at the robot in rviz to understand the orientation of the links and how they differ from 2R axes
+        q2 = -q2 - 3*np.pi/2.
+        q3 = -q3 - np.pi/2 # adjusts the 0 configuration 
+
+        print("Q2 adjusted: ", q2)
+        print("Q3 adjusted: ", q3)
+
+        #TODO: fill R0123
+              #HINT: You have the analytical form for R0123 in the github wiki page
+        R0123 = Rotation.from_matrix([
+            [np.cos(q1), -np.sin(q1), 0],
+            [np.sin(q1), np.cos(q1), 0],
+            [0, 0, 1],
+            
+        ]).as_matrix()
+        # TODO: compute R456
+        #       HINT: - You have R0123
+        #             - You have R0123456 (current_R)
+        #             - how do you get R456? 
+        R456 = R0123.transpose() @ R
+        
+        # TODO: compute q4, q5, q6
+        #       HINT: - You have the analytic form of R456 in the github wiki page
+        #             - Remember to handle the singularity case
+        # if ...:
+            # non singular case
+            
+        q4 = np.arctan2(R456[1,2], R456[2,2]) # rows then columns
+        q5 = np.arcsin(R456[0, 2])
+        q6 = np.arctan2(-R456[0,1], R456[0,0])
+        # else:
+            # Singluar case
+            # q5 = 0.
+            # q4 = 0.
+            # q6 = 0.
+
+
+        print("Q4: ", q4)
+        print("Q5: ", q5)
+        print("Q6: ", q6)
+
+        # check that none of the angles are NaN
+        if np.isnan(q1) or np.isnan(q2) or np.isnan(q3) or np.isnan(q4) or np.isnan(q5) or np.isnan(q6):
+            return
         
         # Publish the joint states
         self.send_joint_states(q1, q2, q3, q4, q5, q6)
@@ -171,7 +173,7 @@ class IK(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    ik_client = IK()
+    ik_client = IKClient()
     
     try:
         rclpy.spin(ik_client)
@@ -183,6 +185,3 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-
-
-# TODO: add script that uses TF to 

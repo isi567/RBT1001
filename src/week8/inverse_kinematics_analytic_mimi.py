@@ -9,67 +9,39 @@ from tf2_ros import TransformException
 from tf2_ros.buffer import Buffer
 from tf2_ros.transform_listener import TransformListener
 
-def compute_ik(target_P, target_R, elbow_up=True):
+def compute_ik(target_P, target_R):
     if target_P is None or target_R is None:
         return None
     
     # 1. find Pw, the wrist position
-    Pw = target_P - 0.065 * target_R[:,2]
-    print("Pw: ", Pw)
+    x, y, z = target_P
+    R = target_R
 
     # 2. find q1, the first joint angle
-    q1 = np.arctan2(Pw[1], Pw[0])
+    q1 = np.arctan2(y, x)
 
     # 3. find Pw' the wrist position in the xy plane
-    Pw_prime = np.array([
-        np.linalg.norm(Pw[0:2]), 
-        Pw[2] - 0.136, 
-        0])
-
-    print("Pw_prime: ", Pw_prime)
-
-    print("Q1: ", q1)
-
-    # 4. find q3 
-    c3 = (Pw_prime[0]**2 + Pw_prime[1]**2 - 0.1**2 - 0.107 ** 2) / (2. * 0.1 * 0.107)
-    s3p = np.sqrt(1. - c3**2)
-    s3n = -np.sqrt(1. - c3**2) 
-
-    if elbow_up:
-        q3 = np.arctan2(s3n, c3)
-    else:
-        q3 = np.arctan2(s3p, c3)
-
-    # print(c3, s3p, s3n)
-    
-    
-    # # 5. find q2, elbow up and elbow down 
-    q2 = np.arctan2(Pw_prime[1], Pw_prime[0]) - np.arctan2(0.107 * np.sin(q3), 0.1 + 0.107 * np.cos(q3))
-
-    # when the actual angle is 0 the angle is pi/2
-    q2 = -q2 - 3*np.pi/2.
-
-    q3 = -q3  - np.pi/2.
+    s = z
+    q3 = s  #  q3 is the translation along z-axis
+    q2 = x/np.cos(q1) # q2 is the translation along x-axis
 
     print("Q2: ", q2)
 
     print("Q3: ", q3)
 
     # Now we know R0123 and R0123456, we can find R456
-    R0123 = Rotation.from_matrix([
-        [np.sin(q2+q3)*np.cos(q1), np.cos(q1)*np.cos(q2+q3), -np.sin(q1)],
-        [np.sin(q1)*np.sin(q2+q3) , np.sin(q1)*np.cos(q2+q3), np.cos(q1)],
-        [np.cos(q2+q3), -np.sin(q2+q3), 0]
-    ]).as_matrix()
-    R456 = R0123.T @ target_R
+    R0123 = np.array([
+            [np.cos(q1), -np.sin(q1), 0],
+            [np.sin(q1), np.cos(q1), 0],
+            [0, 0, 1]
+        ])
+    R456 = np.dot(np.linalg.inv(R0123), R)
 
     # ASSUMPTION: non-singluar case in which r23 /= +-1
     # TODO: handle the singular case
-    q5 = np.arccos(R456[1, 2])
-    q4 = np.arctan2(R456[2, 2], -R456[0, 2])
-    q6 = np.arctan2(R456[1, 0], R456[1, 1])
-    
-    q6 = q6 - np.pi
+    q4 = np.arctan2(-R456[1, 2], R456[2, 2])
+    q5 = np.arcsin(R456[0, 2])
+    q6 = np.arctan2(-R456[0, 1], R456[0, 0])
 
     print("Q4: ", q4)
     print("Q5: ", q5)
@@ -141,9 +113,9 @@ class IK(Node):
             # Compute the IK solution
             self.compute_ik(P, R)
 
-    def compute_ik(self, target_P, target_R,):
+    def compute_ik(self, target_P, target_R, elbow_up=True):
         
-        q = compute_ik(self, target_P, target_R,)
+        q = compute_ik(self, target_P, target_R)
 
         if q is None:
             return
