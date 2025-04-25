@@ -1,0 +1,65 @@
+<?xml version='1.0'?>
+<sdf version='1.7'>
+  <model name='rescue_bot'>
+    <!-- Set to false for movable robots -->
+    <static>false</static>
+    
+    <!-- Base Link -->
+    <link name="base">
+      <visual name="base_visual">
+        <geometry>
+          <mesh>
+            <uri>model://rescue_bot/meshes/base.dae</uri>
+            <scale>0.1 0.1 0.1</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="base_collision">
+        <geometry>
+          <box>
+            <size>0.5 0.3 0.2</size>
+          </box>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Arm Link -->
+    <link name="arm">
+      <visual name="arm_visual">
+        <geometry>
+          <mesh>
+            <uri>model://rescue_bot/meshes/arm.dae</uri>
+            <scale>0.1 0.1 0.1</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="arm_collision">
+        <geometry>
+          <cylinder>
+            <radius>0.05</radius>
+            <length>0.3</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Revolute Joint -->
+    <joint name="arm_joint" type="revolute">
+      <parent>base</parent>
+      <child>arm</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+        </limit>
+      </axis>
+    </joint>
+
+    <!-- REQUIRED: Control Plugin -->
+    <plugin 
+      filename="libignition-gazebo-joint-controller-system.so"
+      name="ignition::gazebo::systems::JointController">
+    </plugin>
+  </model>
+</sdf>
