@@ -23,7 +23,7 @@ from inverse_kinematics_analytic import compute_ik
 # NOTE: Make sure they are inside the robot's workspace
 CARTESIAN_WAYPOINTS = [
             [0.1, 0.1, 0.0],
-            [0.1, -0.31, 0.2],
+            [0.1, -0.7, 0.3],
             [-0.2, -0.11, 0.2],
             [0.1, 0.1, 0.0],# Return to starting position
 ]
@@ -32,18 +32,18 @@ CARTESIAN_WAYPOINTS = [
 # Format: [joint1, joint2, joint3, joint4, joint5, joint6]
 JOINT_WAYPOINTS = [
     [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],             # Home position
-    [0.5, 0.5, 0.2, 0.3, 0.3, 0.5],             # Position 1
-    [-0.5, 0.8, -0.5, -0.4, 0.5, 1.0],          # Position 2
+    [0.5, 0.4, 0.2, 0.3, 0.3, 0.5],             # Position 1
+    [-0.3, 0.8, -0.5, -0.2, 0.5, 1.0],          # Position 2
     [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]              # Back to home position
 ]
 
 # Choose whether to use Cartesian waypoints or joint waypoints
-USE_CARTESIAN = False 
+USE_CARTESIAN = False
 
 # Trapezoidal trajectory parameters
-MAX_CARTESIAN_VELOCITY = 0.2  # m/s
+MAX_CARTESIAN_VELOCITY = 1.0  # m/s
 SEGMENT_TIME = 2.0  # seconds per segment
-TICKS_PER_SEGMENT = 20  # number of points per segment
+TICKS_PER_SEGMENT = 60  # number of points per segment
 
 # Simulation parameters
 ACTION_SERVER = '/joint_trajectory_controller/follow_joint_trajectory'

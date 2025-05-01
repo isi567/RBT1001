@@ -24,14 +24,18 @@
       </link>
     </model>
 
-
-
-    <!-- NEW: Simple external blue cube -->
     <include>
-      <name>external_blue_cube</name>
-      <uri>model://blue_cube</uri>  <!-- This looks for blue_cube/ folder -->
-      <pose>-1 0 0.5 0 0 0</pose>  <!-- 1m left of origin -->
+      <uri>model://cardboard_box</uri>
+      <pose>0.65 0.60 0.3 0 0 0.5</pose>
     </include>
+
+    <include>
+      <uri>model://pallet</uri>
+      <pose>0.1 0.50 0.3 0 0 0.7</pose>
+    </include>
+
+
+
 
     <scene><shadows>false</shadows></scene>
   </world>
