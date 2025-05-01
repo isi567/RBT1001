@@ -38,7 +38,7 @@ JOINT_WAYPOINTS = [
 ]
 
 # Choose whether to use Cartesian waypoints or joint waypoints
-USE_CARTESIAN = True 
+USE_CARTESIAN = False 
 
 # Trapezoidal trajectory parameters
 MAX_CARTESIAN_VELOCITY = 0.2  # m/s
