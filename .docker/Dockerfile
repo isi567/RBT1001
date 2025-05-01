@@ -28,12 +28,14 @@ RUN . /opt/ros/humble/setup.sh && \
     # Install additional ROS 2 packages
 RUN DEBIAN_FRONTEND=noninteractive apt update && \
     apt upgrade -y && \
-    apt install -y \
+    apt --fix-broken install -y \
     ros-humble-tf-transformations \
     ros-humble-urdf-launch \
     ros-humble-xacro \
-    ros-humble-ign-ros2-control \
-    ros-humble-ign-ros2-control-demos
+    ros-humble-gz-ros2-control \
+    ros-humble-gz-ros2-control-demos \
+    ros-humble-rqt-controller-manager \
+    ros-humble-rqt-joint-trajectory-controller
 # RUN DEBIAN_FRONTEND=noninteractive apt update && \
 #     apt upgrade -y && \
 #     apt install -y && \
