@@ -8,21 +8,8 @@
     <!-- Existing environment -->
     <include><uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Sun</uri></include>
     <include><uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ground Plane</uri></include>
-    <include><uri>model://brown_table</uri><name>red_cylinder</name><pose>0.22 0.12 0.175 0 0 0</pose></include>
-
+  
     <!-- Your original red box (internal) -->
-    <model name="simple_red_box">
-      <pose>1 0 0.5 0 0 0</pose>
-      <link name="link">
-        <visual name="visual">
-          <geometry><box><size>0.5 0.5 0.5</size></box></geometry>
-          <material><ambient>1 0 0 1</ambient><diffuse>1 0 0 1</diffuse></material>
-        </visual>
-        <collision name="collision">
-          <geometry><box><size>0.5 0.5 0.5</size></box></geometry>
-        </collision>
-      </link>
-    </model>
 
     <include>
       <uri>model://cardboard_box</uri>
@@ -31,10 +18,8 @@
 
     <include>
       <uri>model://pallet</uri>
-      <pose>0.1 0.50 0.3 0 0 0.7</pose>
+      <pose>0.1 0.50 0.0 0 0 0</pose>
     </include>
-
-
 
 
     <scene><shadows>false</shadows></scene>
