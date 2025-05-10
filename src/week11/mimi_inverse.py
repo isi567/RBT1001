@@ -2,7 +2,8 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 
 # Define the IK function (assuming it's in the same file or imported)
-def compute_ik(position, target_R=None):
+def compute_ik(position, target_R=None, elbow_up=True):
+
     x, y, z = position
 
     # Compute q1
@@ -34,9 +35,10 @@ def compute_ik(position, target_R=None):
 # Define Cartesian waypoints
 CARTESIAN_WAYPOINTS = [
     [0.1, 0.1, 0.0],  # Starting position
-    [0.3, -0.5, 0.0], # Move to the box's position
-    [0.0, 0.45, 0.0], # Move to the target position
+    [0.3, -0.45, 0.25], # Move to the target position
+    [0.0, 0.45, 0.25], # Move to the box's position
     [0.1, 0.1, 0.0],  # Return to starting position
+    [0.0, 0.0, 0.0]   # Final position (home)
 ]
 
 # Compute IK for each waypoint
