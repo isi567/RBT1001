@@ -161,6 +161,8 @@
         <xacro:default_inertial mass="0.2"/>
     </link>
 
+
+
     <joint name="robot_in_world" type="fixed" >
         <origin xyz="0 0 0.0" rpy="0 0 0" />
         <parent link="world" />
@@ -248,5 +250,128 @@
       <implicitSpringDamper>true</implicitSpringDamper>
     </gazebo>
   </xacro:macro>
+
+
+    <material name="orange">
+      <color rgba="1 0.5 0 1"/>
+    </material>
+    <material name="steel">
+      <color rgba="0.7 0.7 0.7 1"/>
+    </material>
+
+        <!-- ============== FORKLIFT END EFFECTOR ============== -->
+    <!-- Forklift Base (attached to link6) -->
+    <link name="forklift_base">
+      <visual>
+        <geometry>
+          <box size="0.1 0.1 0.02"/>  <!-- Small mounting plate -->
+        </geometry>
+        <material name="orange"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.1 0.1 0.02"/>
+        </geometry>
+      </collision>
+      <xacro:default_inertial mass="0.3"/>
+    </link>
+
+    <!-- Vertical Steel Bars (2x) -->
+    <link name="fork_vertical_bar_left">
+      <visual>
+        <geometry>
+          <box size="0.02 0.02 0.2"/>  <!-- Slim vertical bar (20cm tall) -->
+        </geometry>
+        <material name="steel"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.02 0.02 0.2"/>
+        </geometry>
+      </collision>
+      <xacro:default_inertial mass="0.2"/>
+    </link>
+
+    <link name="fork_vertical_bar_right">
+      <visual>
+        <geometry>
+          <box size="0.02 0.02 0.2"/>
+        </geometry>
+        <material name="steel"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.02 0.02 0.2"/>
+        </geometry>
+      </collision>
+      <xacro:default_inertial mass="0.2"/>
+    </link>
+
+    <!-- Forklift Forks (Rectangular, at bottom of bars) -->
+    <link name="fork_horizontal_tine_left">
+      <visual>
+        <geometry>
+          <box size="0.3 0.05 0.01"/>  <!-- Flat rectangular fork (30cm long) -->
+        </geometry>
+        <material name="steel"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.3 0.05 0.01"/>
+        </geometry>
+      </collision>
+      <xacro:default_inertial mass="0.1"/>
+    </link>
+
+    <link name="fork_horizontal_tine_right">
+      <visual>
+        <geometry>
+          <box size="0.3 0.05 0.01"/>
+        </geometry>
+        <material name="steel"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.3 0.05 0.01"/>
+        </geometry>
+      </collision>
+      <xacro:default_inertial mass="0.1"/>
+    </link>
+
+    <!-- Joints -->
+    <joint name="link6_to_forklift" type="fixed">
+      <parent link="link6"/>
+      <child link="forklift_base"/>
+      <origin xyz="0 0 0" rpy="1.5708 -1.5708 0"/>  <!-- Compensate for link6's rotation -->
+    </joint>
+
+    <!-- Vertical Bars (attached to base) -->
+    <joint name="forklift_to_vertical_bar_left" type="fixed">
+      <parent link="forklift_base"/>
+      <child link="fork_vertical_bar_left"/>
+      <origin xyz="0 -0.05 -0.1" rpy="0 0 0"/>  <!-- Left offset -->
+    </joint>
+
+    <joint name="forklift_to_vertical_bar_right" type="fixed">
+      <parent link="forklift_base"/>
+      <child link="fork_vertical_bar_right"/>
+      <origin xyz="0 0.05 -0.1" rpy="0 0 0"/>   <!-- Right offset -->
+    </joint>
+
+    <!-- Horizontal Forks (attached to bottom of bars) -->
+    <joint name="vertical_bar_left_to_tine" type="fixed">
+      <parent link="fork_vertical_bar_left"/>
+      <child link="fork_horizontal_tine_left"/>
+      <origin xyz="0.15 0 -0.1" rpy="0 0 0"/>  <!-- Extend forward -->
+    </joint>
+
+    <joint name="vertical_bar_right_to_tine" type="fixed">
+      <parent link="fork_vertical_bar_right"/>
+      <child link="fork_horizontal_tine_right"/>
+      <origin xyz="0.15 0 -0.1" rpy="0 0 0"/>  <!-- Extend forward -->
+    </joint>
+    
+
+
   
 </robot>

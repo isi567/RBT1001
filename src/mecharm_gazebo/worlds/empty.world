@@ -1,6 +1,22 @@
 <sdf version="1.7">
   <world name="default">
     <gravity>0.0 0.0 -9.8</gravity>
+    <physics type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <ode>
+        <solver>
+          <type>quick</type>  <!-- Faster but less precise -->
+          <iters>20</iters>   <!-- Reduce from default 50-250 -->
+          <precon_iters>0</precon_iters>
+          <sor>1.3</sor>
+        </solver>
+        <constraints>
+          <cfm>0.00001</cfm>  <!-- Reduce constraint force mixing -->
+          <erp>0.2</erp>      <!-- Error reduction parameter -->
+        </constraints>
+      </ode>
+    </physics>
 
     <!-- Existing environment -->
     <include><uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Sun</uri></include>
@@ -22,7 +38,7 @@
     <!-- goal cardboard box -->
     <include>
       <uri>model://cardboard_box</uri>
-      <pose>0 -0.5 0.15 0 0 0.0</pose>
+      <pose>0.3 -0.02 0.23 0 0 0.0</pose>
       <name>cardboard_box_2</name>
     </include>
 
