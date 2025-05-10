@@ -13,32 +13,29 @@ from rclpy.action import ActionClient
 
 # Import existing functionality
 from trapezoidal_trajectory import TrajectoryPlanning 
-from inverse_kinematics_analytic import compute_ik    
+from mimi_inverse import compute_ik    
 
-#################################################
-# STUDENT CONFIGURATION SECTION - MODIFY THIS   #
-#################################################
-
-# Define waypoints in cartesian space (x, y, z)
+## Define waypoints in cartesian space (x, y, z)
 # NOTE: Make sure they are inside the robot's workspace
 CARTESIAN_WAYPOINTS = [
-            [0.1, 0.1, 0.0],
-            [0.1, -0.7, 0.3],
-            [-0.2, -0.11, 0.2],
-            [0.1, 0.1, 0.0],# Return to starting position
+    [0.1, 0.1, 0.0],  # Starting position
+    [0.0, 0.45, 0.0], # Move to the target position
+    [0.3, 0.45, 0.0], # Move to the box's position
+    [0.1, 0.1, 0.0],  # Return to starting position
 ]
 
 # If you want to set joint angles directly, use this list instead
 # Format: [joint1, joint2, joint3, joint4, joint5, joint6]
 JOINT_WAYPOINTS = [
-    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],             # Home position
-    [0.5, 0.4, 0.2, 0.3, 0.3, 0.5],             # Position 1
-    [-0.3, 0.8, -0.5, -0.2, 0.5, 1.0],          # Position 2
-    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]              # Back to home position
+    [0.7853981633974483, -4.642334505560722, -3.2093547793489625, 0.0, 0.0, 0.0],  # Starting position
+    [1.5707963267948966, -6.283185307179586, -1.5707963267948966, 0.0, 0.0, 0.0],  # Move to the target position
+    [-1.0303768265243125, -3.682012153860377, -1.5707963267948966, 0.0, 0.0, 0.0],  # Move to the box's position
+    [0.7853981633974483, -4.642334505560722, -3.2093547793489625, 0.0, 0.0, 0.0],  # Return to starting position
+    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 ]
 
 # Choose whether to use Cartesian waypoints or joint waypoints
-USE_CARTESIAN = False
+USE_CARTESIAN = True
 
 # Trapezoidal trajectory parameters
 MAX_CARTESIAN_VELOCITY = 1.0  # m/s
