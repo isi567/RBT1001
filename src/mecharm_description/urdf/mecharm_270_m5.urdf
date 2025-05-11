@@ -1,16 +1,14 @@
 <?xml version="1.0"?>
-<robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter" >
-	
-<xacro:property name="width" value=".2" />
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter">
+
+  <xacro:property name="width" value=".2" />
 
   <xacro:macro name="default_inertial" params="mass">
     <inertial>
-      <!-- <origin xyz="0 0 0.0" rpy="0 0 0"/> -->
       <mass value="${mass}" />
       <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
     </inertial>
   </xacro:macro>
-
 
   <material name="blue">
     <color rgba="0.1 0.1 0.3 1"/>
@@ -23,147 +21,134 @@
   <xacro:macro name="mecharm" params="*origin">
     <link name="world" />
 
+    <!-- Base as box -->
     <link name="base">
       <visual>
         <geometry>
-        <!--- 0.0 0 -0.04  1.5708 3.14159-->
-        <mesh filename="package://mecharm_description/mesh/base.dae"/>
+          <mesh filename="package://mecharm_description/mesh/base.dae"/>
         </geometry>
         <material name="gray"/>
-        <origin xyz = " 0 0 0 " rpy = " 0 0 -3.1415926"/>
+        <origin xyz="0 0 0" rpy="0 0 -3.1415926"/>
       </visual>
       <collision>
         <geometry>
-        <!--- 0.0 0 -0.04  1.5708 3.14159-->
-          <mesh filename="package://mecharm_description/mesh/base.dae"/>
+          <box size="0.2 0.2 0.1"/> <!-- Simplified box collision -->
         </geometry>
-        <origin xyz = " 0 0 0 " rpy = " 0 0 -3.1415926"/>
+        <origin xyz="0 0 0.05" rpy="0 0 0"/>
       </collision>
-          
-        <xacro:default_inertial mass="100"/>
-
+      <xacro:default_inertial mass="100"/>
     </link>
 
+    <!-- Link1 as cylinder -->
     <link name="link1">
       <visual>
         <geometry>
-        <mesh filename="package://mecharm_description/mesh/link1.dae"/>
+          <mesh filename="package://mecharm_description/mesh/link1.dae"/>
         </geometry>
         <material name="blue"/>
-        <origin xyz = "0 0 -0.132 " rpy = " 0 0 0"/>
+        <origin xyz="0 0 -0.132" rpy="0 0 0"/>
       </visual>
       <collision>
         <geometry>
-          <mesh filename="package://mecharm_description/mesh/link1.dae"/>
+          <cylinder length="0.2" radius="0.05"/> <!-- Simplified cylinder -->
         </geometry>
-        <origin xyz = "0 0 -0.132 " rpy = " 0 0 0"/>
+        <origin xyz="0 0 -0.1" rpy="0 0 0"/>
       </collision>
-          
-        <xacro:default_inertial mass="0.5"/>
+      <xacro:default_inertial mass="0.5"/>
     </link>
 
+    <!-- Link2 as cylinder -->
     <link name="link2">
       <visual>
         <geometry>    
-        <mesh filename="package://mecharm_description/mesh/link2.dae"/>
+          <mesh filename="package://mecharm_description/mesh/link2.dae"/>
         </geometry>
         <material name="blue"/>
-        <origin xyz = "-0.005 0.21 0.002  " rpy = " 1.5708 -3.1415926 0"/>
-
+        <origin xyz="-0.005 0.21 0.002" rpy="1.5708 -3.1415926 0"/>
       </visual>
       <collision>
         <geometry>    
-        <mesh filename="package://mecharm_description/mesh/link2.dae"/>
+          <cylinder length="0.2" radius="0.04"/> <!-- Simplified cylinder -->
         </geometry>
-        <origin xyz = "-0.005  -0.21 0.002  " rpy = " 1.5708 -3.1415926 0"/>
-        
+        <origin xyz="0 -0.1 0" rpy="0 0 0"/>
       </collision>   
-          
-        <xacro:default_inertial mass="0.5"/>  
+      <xacro:default_inertial mass="0.5"/>  
     </link>
 
+    <!-- Link3 as cylinder -->
     <link name="link3">
       <visual>
         <geometry> 
-        <!--- 0.0 0 -0.04 -->
-        <mesh filename="package://mecharm_description/mesh/link3.dae"/>
+          <mesh filename="package://mecharm_description/mesh/link3.dae"/>
         </geometry>
         <material name="blue"/>
-        <origin xyz = "-0.09 0.306 0.005 " rpy = "1.5708 3.1415926  0"/>
-        <!-- <origin xyz = "-0.0 0.0 0.000 " rpy = "0 0  0"/> -->
+        <origin xyz="-0.09 0.306 0.005" rpy="1.5708 3.1415926 0"/>
       </visual>
       <collision>
         <geometry>
-        <!--- 0.0 0 -0.04 -->
-        <mesh filename="package://mecharm_description/mesh/link3.dae"/>
+          <cylinder length="0.15" radius="0.035"/> <!-- Simplified cylinder -->
         </geometry>
-        <origin xyz = "-0.09 0.306 0.005" rpy = "1.5708 3.1415926 0"/>
+        <origin xyz="0.05 -0.15 0" rpy="0 0 0"/>
       </collision>
-          
-        <xacro:default_inertial mass="0.3"/>
+      <xacro:default_inertial mass="0.3"/>
     </link>
 
+    <!-- Link4 as cylinder -->
     <link name="link4">
       <visual>
         <geometry>
-        <!--- 0.0 0 -0.04 -->
-        <mesh filename="package://mecharm_description/mesh/link4.dae"/>
+          <mesh filename="package://mecharm_description/mesh/link4.dae"/>
         </geometry>
         <material name="blue"/>
-        <origin xyz = "0.009 -0.311 -0.228" rpy = " 0 1.5708 1.5708"/>
+        <origin xyz="0.009 -0.311 -0.228" rpy="0 1.5708 1.5708"/>
       </visual>
       <collision>
         <geometry>
-        <!--- 0.0 0 -0.04 -->
-        <mesh filename="package://mecharm_description/mesh/link4.dae"/>
+          <cylinder length="0.1" radius="0.03"/> <!-- Simplified cylinder -->
         </geometry>
-      <origin xyz = "0.009 -0.311  -0.228" rpy = " 0 1.5708  1.5708"/>
+        <origin xyz="0 -0.15 -0.2" rpy="0 1.5708 0"/>
       </collision>
-          
-        <xacro:default_inertial mass="0.2"/>
+      <xacro:default_inertial mass="0.2"/>
     </link>
 
+    <!-- Link5 as cylinder -->
     <link name="link5">
       <visual>
         <geometry>
-        <!--- 0.0 0 -0.04 -->
-        <mesh filename="package://mecharm_description/mesh/link5.dae"/>
+          <mesh filename="package://mecharm_description/mesh/link5.dae"/>
         </geometry>
         <material name="blue"/>
-        <origin xyz = "-0.292 -0.318 -0.007" rpy = " 1.5708 0 3.1415926"/>
+        <origin xyz="-0.292 -0.318 -0.007" rpy="1.5708 0 3.1415926"/>
       </visual>
       <collision>
         <geometry>
-        <mesh filename="package://mecharm_description/mesh/link5.dae"/>
+          <cylinder length="0.08" radius="0.025"/> <!-- Simplified cylinder -->
         </geometry>
-        <origin xyz = "-0.292 -0.318 -0.007 " rpy = " 1.5708 0 3.1415926"/>
+        <origin xyz="-0.15 -0.15 0" rpy="0 0 0"/>
       </collision>
-          
-        <xacro:default_inertial mass="0.2"/>
+      <xacro:default_inertial mass="0.2"/>
     </link>
 
+    <!-- Link6 as cylinder -->
     <link name="link6">
       <visual>
         <geometry>
-        <!--- 0.0 0 -0.04 -->
-        <mesh filename="package://mecharm_description/mesh/link6.dae"/>
+          <mesh filename="package://mecharm_description/mesh/link6.dae"/>
         </geometry>
         <material name="blue"/>
-        <origin xyz = "-0.1645 0.0536 -0.211 " rpy = " 0 1.5708 0"/>
+        <origin xyz="-0.1645 0.0536 -0.211" rpy="0 1.5708 0"/>
       </visual>
       <collision>
         <geometry>
-        <mesh filename="package://mecharm_description/mesh/link6.dae"/>
+          <cylinder length="0.1" radius="0.02"/> <!-- Simplified cylinder -->
         </geometry>
-        <origin xyz = "-0.1645 0.0536 -0.211 " rpy = " 0 1.5708 0"/>
+        <origin xyz="-0.1 0 -0.2" rpy="0 1.5708 0"/>
       </collision>
-          
-        <xacro:default_inertial mass="0.2"/>
+      <xacro:default_inertial mass="0.2"/>
     </link>
 
-
-
-    <joint name="robot_in_world" type="fixed" >
+    <!-- Joint definitions remain the same as original -->
+    <joint name="robot_in_world" type="fixed">
         <origin xyz="0 0 0.0" rpy="0 0 0" />
         <parent link="world" />
         <child link="base" />
@@ -172,206 +157,178 @@
 
     <joint name="joint1_to_base" type="revolute">
       <axis xyz="0 0 1"/>
-      <limit effort = "1000.0" lower = "-2.792527" upper = "2.792527" velocity = "1.0"/>
+      <limit effort="1000.0" lower="-2.792527" upper="2.792527" velocity="1.0"/>
       <parent link="base"/>
       <child link="link1"/>
-      <origin xyz= "0 0 0.1" rpy = "0 0 0"/>  
-
+      <origin xyz="0 0 0.1" rpy="0 0 0"/>  
       <dynamics damping="0.5" friction="0.1"/>
     </joint>
-    <gazebo reference="joint1_to_base">
-      <implicitSpringDamper>true</implicitSpringDamper>
-    </gazebo>
-
 
     <joint name="joint2_to_joint1" type="revolute">
       <axis xyz="0 0 1"/>
-      <limit effort = "1000.0" lower = "-1.3089" upper = "2.0943" velocity = "1.0"/>
+      <limit effort="1000.0" lower="-1.3089" upper="2.0943" velocity="1.0"/>
       <parent link="link1"/>
       <child link="link2"/>
-      <origin xyz= "0 0 0.038" rpy = " -1.5708 0 0 "/>  
-
+      <origin xyz="0 0 0.038" rpy="-1.5708 0 0"/>  
       <dynamics damping="0.5" friction="0.1"/>
     </joint>
-    <gazebo reference="joint2_to_joint1">
-      <implicitSpringDamper>true</implicitSpringDamper>
-    </gazebo>
-
 
     <joint name="joint3_to_joint2" type="revolute">
-      <axis xyz=" 0 0 1"/>
-      <limit effort = "1000.0" lower = "-3.0543" upper = "1.1344" velocity = "1.0"/>
+      <axis xyz="0 0 1"/>
+      <limit effort="1000.0" lower="-3.0543" upper="1.1344" velocity="1.0"/>
       <parent link="link2"/>
       <child link="link3"/>
-      <origin xyz= "0.0 -0.1 0   " rpy = "0 0 0 "/>  
-
+      <origin xyz="0.0 -0.1 0" rpy="0 0 0"/>  
       <dynamics damping="0.5" friction="0.1"/>
     </joint>
-    <gazebo reference="joint3_to_joint2">
-      <implicitSpringDamper>true</implicitSpringDamper>
-    </gazebo>
 
     <joint name="joint4_to_joint3" type="revolute">
-      <axis xyz=" 0 0 1"/>
-      <limit effort = "1000.0" lower = "-2.7052" upper = "2.7052" velocity = "1.0"/>
+      <axis xyz="0 0 1"/>
+      <limit effort="1000.0" lower="-2.7052" upper="2.7052" velocity="1.0"/>
       <parent link="link3"/>
       <child link="link4"/>
-      <origin xyz= "0.108 -0.005  -0.001" rpy = "0 1.5708 0 "/>  
-
+      <origin xyz="0.108 -0.005 -0.001" rpy="0 1.5708 0"/>  
       <dynamics damping="0.5" friction="0.1"/>
     </joint>
-    <gazebo reference="joint4_to_joint3">
-      <implicitSpringDamper>true</implicitSpringDamper>
-    </gazebo>
 
     <joint name="joint5_to_joint4" type="revolute">
       <axis xyz="0 0 1"/>
-      <limit effort = "1000.0" lower = "-2.0071" upper = "2.0071" velocity = "1.0"/>
+      <limit effort="1000.0" lower="-2.0071" upper="2.0071" velocity="1.0"/>
       <parent link="link4"/>
       <child link="link5"/>
-      <origin xyz= " -0.001 0 0.0" rpy = "  0 -1.5708 0"/>  
-
+      <origin xyz="-0.001 0 0.0" rpy="0 -1.5708 0"/>  
       <dynamics damping="0.5" friction="0.1"/>
     </joint>
-    <gazebo reference="joint5_to_joint4">
-      <implicitSpringDamper>true</implicitSpringDamper>
-    </gazebo>
 
     <joint name="joint6_to_joint5" type="revolute">
       <axis xyz="0 0 1"/>
-      <limit effort = "1000.0" lower = "-3.14" upper = "3.14" velocity = "1.0"/>
+      <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="1.0"/>
       <parent link="link5"/>
       <child link="link6"/>
-      <origin xyz= " 0.06 0.00 -0.0" rpy = "  0 1.5708 0 "/>  
-
+      <origin xyz="0.06 0.00 -0.0" rpy="0 1.5708 0"/>  
       <dynamics damping="0.5" friction="0.1"/>
     </joint>
-    <gazebo reference="joint6_to_joint5">
-      <implicitSpringDamper>true</implicitSpringDamper>
-    </gazebo>
   </xacro:macro>
 
+  <!-- Forklift components remain the same -->
+  <material name="orange">
+    <color rgba="1 0.5 0 1"/>
+  </material>
+  <material name="steel">
+    <color rgba="0.7 0.7 0.7 1"/>
+  </material>
 
-    <material name="orange">
-      <color rgba="1 0.5 0 1"/>
-    </material>
-    <material name="steel">
-      <color rgba="0.7 0.7 0.7 1"/>
-    </material>
+ <!-- Forklift Base -->
+<link name="forklift_base">
+  <visual>
+    <geometry><box size="0.1 0.1 0.02"/></geometry>
+    <material name="orange"/>
+  </visual>
+  <collision>
+    <geometry><box size="0.12 0.12 0.025"/></geometry> <!-- Slightly larger -->
+  </collision>
+  <xacro:default_inertial mass="0.3"/>
+</link>
 
-        <!-- ============== FORKLIFT END EFFECTOR ============== -->
-    <!-- Forklift Base (attached to link6) -->
-    <link name="forklift_base">
-      <visual>
-        <geometry>
-          <box size="0.1 0.1 0.02"/>  <!-- Small mounting plate -->
-        </geometry>
-        <material name="orange"/>
-      </visual>
-      <collision>
-        <geometry>
-          <box size="0.1 0.1 0.02"/>
-        </geometry>
-      </collision>
-      <xacro:default_inertial mass="0.3"/>
-    </link>
+<!-- Vertical Bars -->
+<link name="fork_vertical_bar_left">
+  <visual>
+    <geometry><box size="0.02 0.02 0.2"/></geometry>
+    <material name="steel"/>
+  </visual>
+  <collision>
+    <geometry><box size="0.025 0.025 0.21"/></geometry> <!-- Larger collision -->
+  </collision>
+  <xacro:default_inertial mass="0.2"/>
+</link>
 
-    <!-- Vertical Steel Bars (2x) -->
-    <link name="fork_vertical_bar_left">
-      <visual>
-        <geometry>
-          <box size="0.02 0.02 0.2"/>  <!-- Slim vertical bar (20cm tall) -->
-        </geometry>
-        <material name="steel"/>
-      </visual>
-      <collision>
-        <geometry>
-          <box size="0.02 0.02 0.2"/>
-        </geometry>
-      </collision>
-      <xacro:default_inertial mass="0.2"/>
-    </link>
+<link name="fork_vertical_bar_right">
+  <visual>
+    <geometry><box size="0.02 0.02 0.2"/></geometry>
+    <material name="steel"/>
+  </visual>
+  <collision>
+    <geometry><box size="0.025 0.025 0.21"/></geometry>
+  </collision>
+  <xacro:default_inertial mass="0.2"/>
+</link>
 
-    <link name="fork_vertical_bar_right">
-      <visual>
-        <geometry>
-          <box size="0.02 0.02 0.2"/>
-        </geometry>
-        <material name="steel"/>
-      </visual>
-      <collision>
-        <geometry>
-          <box size="0.02 0.02 0.2"/>
-        </geometry>
-      </collision>
-      <xacro:default_inertial mass="0.2"/>
-    </link>
+<!-- Fork Tines -->
+<link name="fork_horizontal_tine_left">
+  <visual>
+    <geometry><box size="0.3 0.05 0.01"/></geometry>
+    <material name="steel"/>
+  </visual>
+  <collision>
+    <geometry><box size="0.31 0.055 0.015"/></geometry> <!-- Thicker collision -->
+  </collision>
+  <xacro:default_inertial mass="0.1"/>
+</link>
 
-    <!-- Forklift Forks (Rectangular, at bottom of bars) -->
-    <link name="fork_horizontal_tine_left">
-      <visual>
-        <geometry>
-          <box size="0.3 0.05 0.01"/>  <!-- Flat rectangular fork (30cm long) -->
-        </geometry>
-        <material name="steel"/>
-      </visual>
-      <collision>
-        <geometry>
-          <box size="0.3 0.05 0.01"/>
-        </geometry>
-      </collision>
-      <xacro:default_inertial mass="0.1"/>
-    </link>
+<link name="fork_horizontal_tine_right">
+  <visual>
+    <geometry><box size="0.3 0.05 0.01"/></geometry>
+    <material name="steel"/>
+  </visual>
+  <collision>
+    <geometry><box size="0.31 0.055 0.015"/></geometry>
+  </collision>
+  <xacro:default_inertial mass="0.1"/>
+</link>
 
-    <link name="fork_horizontal_tine_right">
-      <visual>
-        <geometry>
-          <box size="0.3 0.05 0.01"/>
-        </geometry>
-        <material name="steel"/>
-      </visual>
-      <collision>
-        <geometry>
-          <box size="0.3 0.05 0.01"/>
-        </geometry>
-      </collision>
-      <xacro:default_inertial mass="0.1"/>
-    </link>
+<!-- Gazebo Physics Properties -->
+<gazebo reference="fork_horizontal_tine_left">
+  <kp>1000000</kp>
+  <kd>1000</kd>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
+  <collision>
+    <surface>
+      <contact>
+        <ode>
+          <max_vel>0.1</max_vel>
+          <min_depth>0.001</min_depth>
+        </ode>
+      </contact>
+    </surface>
+  </collision>
+</gazebo>
 
-    <!-- Joints -->
-    <joint name="link6_to_forklift" type="fixed">
-      <parent link="link6"/>
-      <child link="forklift_base"/>
-      <origin xyz="0 0 0" rpy="1.5708 -1.5708 0"/>  <!-- Compensate for link6's rotation -->
-    </joint>
+<gazebo reference="fork_horizontal_tine_right">
+  <kp>1000000</kp>
+  <kd>1000</kd>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
+</gazebo>
 
-    <!-- Vertical Bars (attached to base) -->
-    <joint name="forklift_to_vertical_bar_left" type="fixed">
-      <parent link="forklift_base"/>
-      <child link="fork_vertical_bar_left"/>
-      <origin xyz="0 -0.05 -0.1" rpy="0 0 0"/>  <!-- Left offset -->
-    </joint>
+  <joint name="link6_to_forklift" type="fixed">
+    <parent link="link6"/>
+    <child link="forklift_base"/>
+    <origin xyz="0 0 0" rpy="1.5708 -1.5708 0"/>
+  </joint>
 
-    <joint name="forklift_to_vertical_bar_right" type="fixed">
-      <parent link="forklift_base"/>
-      <child link="fork_vertical_bar_right"/>
-      <origin xyz="0 0.05 -0.1" rpy="0 0 0"/>   <!-- Right offset -->
-    </joint>
+  <joint name="forklift_to_vertical_bar_left" type="fixed">
+    <parent link="forklift_base"/>
+    <child link="fork_vertical_bar_left"/>
+    <origin xyz="0 -0.05 -0.1" rpy="0 0 0"/>
+  </joint>
 
-    <!-- Horizontal Forks (attached to bottom of bars) -->
-    <joint name="vertical_bar_left_to_tine" type="fixed">
-      <parent link="fork_vertical_bar_left"/>
-      <child link="fork_horizontal_tine_left"/>
-      <origin xyz="0.15 0 -0.1" rpy="0 0 0"/>  <!-- Extend forward -->
-    </joint>
+  <joint name="forklift_to_vertical_bar_right" type="fixed">
+    <parent link="forklift_base"/>
+    <child link="fork_vertical_bar_right"/>
+    <origin xyz="0 0.05 -0.1" rpy="0 0 0"/>
+  </joint>
 
-    <joint name="vertical_bar_right_to_tine" type="fixed">
-      <parent link="fork_vertical_bar_right"/>
-      <child link="fork_horizontal_tine_right"/>
-      <origin xyz="0.15 0 -0.1" rpy="0 0 0"/>  <!-- Extend forward -->
-    </joint>
-    
+  <joint name="vertical_bar_left_to_tine" type="fixed">
+    <parent link="fork_vertical_bar_left"/>
+    <child link="fork_horizontal_tine_left"/>
+    <origin xyz="0.15 0 -0.1" rpy="0 0 0"/>
+  </joint>
 
+  <joint name="vertical_bar_right_to_tine" type="fixed">
+    <parent link="fork_vertical_bar_right"/>
+    <child link="fork_horizontal_tine_right"/>
+    <origin xyz="0.15 0 -0.1" rpy="0 0 0"/>
+  </joint>
 
-  
 </robot>

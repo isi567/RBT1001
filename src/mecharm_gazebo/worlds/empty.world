@@ -38,7 +38,7 @@
     <!-- goal cardboard box -->
     <include>
       <uri>model://cardboard_box</uri>
-      <pose>0.3 -0.02 0.23 0 0 0.0</pose>
+      <pose>0.31 -0.02 0.2 0.03 0.09 0.0</pose>
       <name>cardboard_box_2</name>
     </include>
 
