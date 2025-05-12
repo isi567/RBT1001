@@ -17,33 +17,47 @@ from inverse_kinematics_analytic import compute_ik
 
 ## Define waypoints in cartesian space (x, y, z, roll, pitch, yaw)
 # NOTE: Make sure they are inside the robot's workspace
+import numpy as np
+
+
+
 CARTESIAN_WAYPOINTS = [
-    [0.0, 0.0, 0.0, 0, 0, 0],   # Final position (home)
-    [0.1, 0.1, 0.0, 0, 0, 0],  # Return to starting position
-    [0.0, 0.45, 0.25, 0, 0, 0], # Move to the box's position
-    [0.3, -0.45, 0.25, 0, 0, 0], # Move to the target position
-    [0.1, 0.1, 0.0, 0, 0, 0],   # Starting position
-    [0.0, 0.0, 0.0, 0, 0, 0]    # Final position (home)
+    [0.0, 0.0, 0.0, 0, 0, 0],   # Start at the center
+    [0.0, 0.0, 0.2, 0, 0, 0],   # Move to the right
+    [0.0, 0.0, 0.0, 0, 0, 0],   # Return to the center
+    [0.0, 0.0, -0.2, 0, 0, 0],  # Move to the left
+    [0.0, 0.0, 0.0, 0, 0, 0]    # Return to the center
 ]
+
+# Add 20 intermediate waypoints between each pair
+
 
 # If you want to set joint angles directly, use this list instead
 # Format: [joint1, joint2, joint3, joint4, joint5, joint6]
 JOINT_WAYPOINTS = [
-    [0.0, -1.5707963267948983, -4.71238898038469, 0.0, 0.0, 0.0],                   # Final position (home)
-    [0.7853981633974483, -4.642334505560722, -3.2093547793489625, 0.0, 0.0, 0.0],  # Return to starting position
-    [1.5707963267948966, -6.283185307179586, -1.5707963267948966, 0.0, 0.0, 0.0],   # Move to the box's position
-    [-0.982793723247329, -3.7295952571373605, -1.5707963267948966, 0.0, 0.0, 0.0],  # Move to the target position
-    [0.7853981633974483, -4.642334505560722, -3.2093547793489625, 0.0, 0.0, 0.0],  # Starting position
-    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    #[0.0, -1.5707963267948983, -4.71238898038469, 0.0, 0.0, 0.0],                   # Start at the center
+    #[0.7853981633974483, -4.642334505560722, -3.2093547793489625, 0.0, 0.0, 0.0],  # Move to the right
+    #[0.0, -1.5707963267948983, -4.71238898038469, 0.0, 0.0, 0.0],                   # Return to the center
+    #[-0.7853981633974483, -4.642334505560722, -3.2093547793489625, 0.0, 0.0, 0.0], # Move to the left
+    #[0.0, -1.5707963267948983, -4.71238898038469, 0.0, 0.0, 0.0]                    # Return to the center
+
+ 
+    [1.5, 0.0, 0.0, 0.0, 0.0, 0.0],  # Turn 180 degrees for joint 1
+    [1.5, 0.0, -1.0, 0.0, 0.0, 0.0],
+    [1.5, 0.0, 0.0, 0.0, 0.0, 0.0],
+    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]               # Return to the initial position
+    
 ]
+
+
 
 # Choose whether to use Cartesian waypoints or joint waypoints
 USE_CARTESIAN = False
 
 # Trapezoidal trajectory parameters
 MAX_CARTESIAN_VELOCITY = 1.0  # m/s
-SEGMENT_TIME = 2.0  # seconds per segment
-TICKS_PER_SEGMENT = 60  # number of points per segment
+SEGMENT_TIME = 10.0  # seconds per segment
+TICKS_PER_SEGMENT = 120  # number of points per segment
 
 # Simulation parameters
 ACTION_SERVER = '/joint_trajectory_controller/follow_joint_trajectory'

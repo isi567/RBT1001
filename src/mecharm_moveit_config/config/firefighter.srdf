@@ -65,7 +65,7 @@
     <disable_collisions link1="link4" link2="link6" reason="Never"/>
     <disable_collisions link1="link5" link2="link6" reason="Adjacent"/>
     <disable_collisions link1="link6" link2="forklift_base" reason="adjacent"/>
-    <disable_collisions link1="fork_tine_left" link2="link1" reason="never"/>
-    <disable_collisions link1="fork_tine_right" link2="link2" reason="never"/>
+    <disable_collisions link1="fork_tine_left" link2="link1" reason="adjacent"/>
+    <disable_collisions link1="fork_tine_right" link2="link2" reason="adjacent"/>
 
 </robot>
