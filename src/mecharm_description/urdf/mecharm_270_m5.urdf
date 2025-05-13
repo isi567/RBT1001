@@ -260,7 +260,7 @@
     <material name="steel"/>
   </visual>
   <collision>
-    <geometry><box size="0.225 0.05 0.01"/></geometry> <!-- Thicker collision -->
+    <geometry><box size="0.23 0.06 0.015"/></geometry> <!-- Thicker collision -->
   </collision>
   <xacro:default_inertial mass="0.1"/>
 </link>
@@ -271,7 +271,7 @@
     <material name="steel"/>
   </visual>
   <collision>
-    <geometry><box size="0.225 0.05 0.01"/></geometry>
+    <geometry><box size="0.23 0.06 0.015"/></geometry>
   </collision>
   <xacro:default_inertial mass="0.1"/>
 </link>
@@ -280,8 +280,8 @@
 <gazebo reference="fork_horizontal_tine_left">
   <kp>1000000</kp>
   <kd>1000</kd>
-  <mu1>0.0</mu1>
-  <mu2>0.0</mu2>
+  <mu1>0.05</mu1>
+  <mu2>0.05</mu2>
   <collision>
     <surface>
       <contact>
@@ -297,8 +297,8 @@
 <gazebo reference="fork_horizontal_tine_right">
   <kp>1000000</kp>
   <kd>1000</kd>
-  <mu1>1.0</mu1>
-  <mu2>1.0</mu2>
+  <mu1>0.05</mu1>
+  <mu2>0.05</mu2>
 </gazebo>
 
   <joint name="link6_to_forklift" type="fixed">

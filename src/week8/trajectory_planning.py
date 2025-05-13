@@ -14,14 +14,19 @@ class TrajectoryPlanning(Node):
         # Define waypoints in cartesian space (x, y, z)
         # NOTE: change at will (just make sure they are inside the robot's workspace)
         waypoints = [
-            [0.1, 0.1, 0.2],
-            [0.1, -0.1, 0.2],
-            [-0.1, -0.1, 0.2]
+            [-1.5, 0.0, 0.35, 0.0, 0.03, 0.0],
+            [-1.5, 0.0, 0.0, 0.0, -0.03, 0.0],
+            [-1.5, 0.0, -0.1, 0.0, -0.03, 0.0],
+            [1.5, 0.0, 0.0, 0.0, 0.0, 0.0],  # Turn 180 degrees for joint 1
+            [1.5, -0.04, -0.1, 0.0, 0.6, 0.0],
+            [1.5, 0.0, 0.0, 0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]               # Return to the initial position
+    
         ]
 
         # Introduce 20 regularly distributed viapoints between waypoints
         # TODO: complete the code
-        via_points = [waypoints[0]]
+        viapoints = [waypoints[0]]
 
         # plot them for visualization
         fig = plt.figure()
@@ -53,9 +58,14 @@ class TrajectoryPlanning(Node):
         # Define waypoints in joint space 
         # NOTE: change at will
         waypoints = [
-            [0., 0., 0., 0., 0., 0.],
-            [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
-            [1.5, 1.4, 1.3, 1.2, 1.1, 1.]
+            [-1.5, 0.0, 0.35, 0.0, 0.03, 0.0],
+            [-1.5, 0.0, 0.0, 0.0, -0.03, 0.0],
+            [-1.5, 0.0, -0.1, 0.0, -0.03, 0.0],
+            [1.5, 0.0, 0.0, 0.0, 0.0, 0.0],  # Turn 180 degrees for joint 1
+            [1.5, -0.04, -0.1, 0.0, 0.6, 0.0],
+            [1.5, 0.0, 0.0, 0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]               # Return to the initial position
+    
         ]
 
         # Introduce 20 regularly distributed viapoints between waypoints

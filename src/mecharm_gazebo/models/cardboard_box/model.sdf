@@ -19,7 +19,7 @@
 
           <mesh>
             <uri>model://cardboard_box/meshes/cardboard_box.dae</uri>
-            <scale>0.25 0.25 0.25</scale>
+            <scale>0.25 0.25 0.3</scale>
           </mesh>
           <!-- <box> -->
             <!-- <size>0.5 0.4 0.3</size> -->
