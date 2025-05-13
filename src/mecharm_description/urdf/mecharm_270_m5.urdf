@@ -233,45 +233,45 @@
 <!-- Vertical Bars -->
 <link name="fork_vertical_bar_left">
   <visual>
-    <geometry><box size="0.02 0.02 0.2"/></geometry>
+    <geometry><box size="0.01 0.01 0.1"/></geometry> <!-- Reduced size -->
     <material name="steel"/>
   </visual>
   <collision>
-    <geometry><box size="0.025 0.025 0.21"/></geometry> <!-- Larger collision -->
+    <geometry><box size="0.0125 0.0125 0.105"/></geometry> <!-- Adjusted collision -->
   </collision>
-  <xacro:default_inertial mass="0.2"/>
+  <xacro:default_inertial mass="0.1"/> <!-- Adjusted mass -->
 </link>
 
 <link name="fork_vertical_bar_right">
   <visual>
-    <geometry><box size="0.02 0.02 0.2"/></geometry>
+    <geometry><box size="0.01 0.01 0.1"/></geometry> <!-- Reduced size -->
     <material name="steel"/>
   </visual>
   <collision>
-    <geometry><box size="0.025 0.025 0.21"/></geometry>
+    <geometry><box size="0.0125 0.0125 0.105"/></geometry> <!-- Adjusted collision -->
   </collision>
-  <xacro:default_inertial mass="0.2"/>
+  <xacro:default_inertial mass="0.1"/> <!-- Adjusted mass -->
 </link>
 
 <!-- Fork Tines -->
 <link name="fork_horizontal_tine_left">
   <visual>
-    <geometry><box size="0.3 0.05 0.01"/></geometry>
+    <geometry><box size="0.225 0.05 0.01"/></geometry>
     <material name="steel"/>
   </visual>
   <collision>
-    <geometry><box size="0.31 0.055 0.015"/></geometry> <!-- Thicker collision -->
+    <geometry><box size="0.225 0.05 0.01"/></geometry> <!-- Thicker collision -->
   </collision>
   <xacro:default_inertial mass="0.1"/>
 </link>
 
 <link name="fork_horizontal_tine_right">
   <visual>
-    <geometry><box size="0.3 0.05 0.01"/></geometry>
+    <geometry><box size="0.225 0.05 0.01"/></geometry>
     <material name="steel"/>
   </visual>
   <collision>
-    <geometry><box size="0.31 0.055 0.015"/></geometry>
+    <geometry><box size="0.225 0.05 0.01"/></geometry>
   </collision>
   <xacro:default_inertial mass="0.1"/>
 </link>
@@ -280,8 +280,8 @@
 <gazebo reference="fork_horizontal_tine_left">
   <kp>1000000</kp>
   <kd>1000</kd>
-  <mu1>1.0</mu1>
-  <mu2>1.0</mu2>
+  <mu1>0.0</mu1>
+  <mu2>0.0</mu2>
   <collision>
     <surface>
       <contact>
@@ -308,27 +308,27 @@
   </joint>
 
   <joint name="forklift_to_vertical_bar_left" type="fixed">
-    <parent link="forklift_base"/>
-    <child link="fork_vertical_bar_left"/>
-    <origin xyz="0 -0.05 -0.1" rpy="0 0 0"/>
+      <parent link="forklift_base"/>
+      <child link="fork_vertical_bar_left"/>
+      <origin xyz="0 -0.05 -0.05" rpy="0 0 0"/> <!-- Adjusted z to -0.05 -->
   </joint>
-
+  
   <joint name="forklift_to_vertical_bar_right" type="fixed">
-    <parent link="forklift_base"/>
-    <child link="fork_vertical_bar_right"/>
-    <origin xyz="0 0.05 -0.1" rpy="0 0 0"/>
+      <parent link="forklift_base"/>
+      <child link="fork_vertical_bar_right"/>
+      <origin xyz="0 0.05 -0.05" rpy="0 0 0"/> <!-- Adjusted z to -0.05 -->
   </joint>
-
+  
   <joint name="vertical_bar_left_to_tine" type="fixed">
-    <parent link="fork_vertical_bar_left"/>
-    <child link="fork_horizontal_tine_left"/>
-    <origin xyz="0.15 0 -0.1" rpy="0 0 0"/>
+      <parent link="fork_vertical_bar_left"/>
+      <child link="fork_horizontal_tine_left"/>
+      <origin xyz="0.1125 0 -0.05" rpy="0 0 0"/> <!-- Adjusted z to -0.05 -->
   </joint>
-
+  
   <joint name="vertical_bar_right_to_tine" type="fixed">
-    <parent link="fork_vertical_bar_right"/>
-    <child link="fork_horizontal_tine_right"/>
-    <origin xyz="0.15 0 -0.1" rpy="0 0 0"/>
+      <parent link="fork_vertical_bar_right"/>
+      <child link="fork_horizontal_tine_right"/>
+      <origin xyz="0.1125 0 -0.05" rpy="0 0 0"/> <!-- Adjusted z to -0.05 -->
   </joint>
 
 </robot>
