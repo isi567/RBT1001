@@ -43,7 +43,7 @@ JOINT_WAYPOINTS = [
 
  
     [1.5, 0.0, 0.0, 0.0, 0.0, 0.0],  # Turn 180 degrees for joint 1
-    [1.5, -0.04, -0.1, 0.0, 0.3, 0.0],
+    [1.5, -0.04, -0.1, 0.0, 0.6, 0.0],
     [1.5, 0.0, 0.0, 0.0, 0.0, 0.0],
     [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]               # Return to the initial position
     
@@ -56,8 +56,8 @@ USE_CARTESIAN = False
 
 # Trapezoidal trajectory parameters
 MAX_CARTESIAN_VELOCITY = 1.0  # m/s
-SEGMENT_TIME = 10.0  # seconds per segment
-TICKS_PER_SEGMENT = 120  # number of points per segment
+SEGMENT_TIME = 6.0  # seconds per segment
+TICKS_PER_SEGMENT = 60  # number of points per segment
 
 # Simulation parameters
 ACTION_SERVER = '/joint_trajectory_controller/follow_joint_trajectory'
