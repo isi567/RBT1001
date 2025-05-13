@@ -4,7 +4,7 @@
     <pose>0 0 0.15 0 0 0</pose>
     <link name="link">
       <inertial>
-        <mass>0.5</mass>
+        <mass>1</mass>
         <inertia>
           <ixx>0.041666667</ixx>
           <ixy>0</ixy>
@@ -29,8 +29,8 @@
           </friction>
           <contact>
             <ode>
-              <kp>10000.0</kp>
-              <kd>100</kd>
+              <kp>1000.0</kp>
+              <kd>10</kd>
               <min_depth>0.001</min_depth>
               <max_vel>10.0</max_vel>
             </ode>
@@ -38,7 +38,7 @@
         </surface>
       </collision>
       <visual name="visual">
-        <pose>0 0 -0.15 0 0 0</pose>
+        <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://cardboard_box/meshes/cardboard_box.dae</uri>
