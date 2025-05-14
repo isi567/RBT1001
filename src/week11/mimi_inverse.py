@@ -1,56 +1,80 @@
 import numpy as np
 from scipy.spatial.transform import Rotation
+from pprint import pprint
 
-# Define the IK function (assuming it's in the same file or imported)
-def compute_ik(position, target_R=None, elbow_up=True):
+def compute_ik(target_P, target_R):
+    if target_P is None or target_R is None:
+        return None
+    
+    # 1. find Pw, the wrist position
+    x, y, z = target_P
+    R = target_R
 
-    x, y, z = position
+    # 2. find q1, the first joint angle
+    q1 = np.arctan2(-y, x)
+    print("Q1: ", q1)
 
-    # Compute q1
-    q1 = np.arctan2(y, x)
+    # 3. find Pw' the wrist position in the xy plane
+    q3 = z  # q3 is the translation along z-axis
+    q2 = np.sqrt(x**2 + y**2)  # q2 is the translation along x-axis
 
-    # Compute wrist position (Pw_prime)
-    Pw_prime = np.array([x, y, z]) - np.array([0, 0, 0.1])  # Adjust for link offsets
+    print("Q2: ", q2)
+    print("Q3: ", q3)
 
-    # Compute q3
-    c3 = (Pw_prime[0]**2 + Pw_prime[1]**2 - 0.1**2 - 0.107**2) / (2 * 0.1 * 0.107)
-    c3 = np.clip(c3, -1, 1)  # Clamp c3 to the range [-1, 1] to avoid invalid sqrt
-    s3p = np.sqrt(1 - c3**2)
-    q3 = np.arctan2(s3p, c3)
+    # Now we know R0123 and R0123456, we can find R456
+    R0123 = np.array([
+        [-np.sin(q1), np.cos(q1), 0],
+        [np.cos(q1), np.cos(q1), 0],
+        [0, 0, 1]
+    ])
+    R456 = R456 = R0123.T @ R
+    print(R456)
 
-    # Compute q2
-    q2 = np.arctan2(Pw_prime[1], Pw_prime[0]) - np.arctan2(0.107 * np.sin(q3), 0.1 + 0.107 * np.cos(q3))
-    q2 = -q2 - 3 * np.pi / 2.
-    q3 = -q3 - np.pi / 2.
+    # ASSUMPTION: non-singular case in which r23 != +-1
+   
+    c5 = np.sqrt(R456[0, 0]**2 + R456[0, 1]**2)
+    s5 = np.sqrt(R456[1, 2]**2 + R456[2, 2]**2)
 
-    # Compute R0123 (optional, for orientation)
-    R0123 = Rotation.from_matrix([
-        [np.sin(q2 + q3) * np.cos(q1), np.cos(q1) * np.cos(q2 + q3), -np.sin(q1)],
-        [np.sin(q1) * np.sin(q2 + q3), np.sin(q1) * np.cos(q2 + q3), np.cos(q1)],
-        [np.cos(q2 + q3), -np.sin(q2 + q3), 0]
-    ]).as_matrix()
 
-    return [q1, q2, q3]
+    q4 = np.arctan2(-R456[1, 2], R456[2, 2])
+    #q5 = np.arcsin(R456[0, 2])
+    q5 = np.arctan2(s5, c5)
+    q6 = np.arctan2(-R456[0, 1], R456[0, 0])
 
-# Define Cartesian waypoints
-CARTESIAN_WAYPOINTS = [
-    [0.1, 0.1, 0.0],  # Starting position
-    [0.3, -0.45, 0.25], # Move to the target position
-    [0.0, 0.45, 0.25], # Move to the box's position
-    [0.1, 0.1, 0.0],  # Return to starting position
-    [0.0, 0.0, 0.0]   # Final position (home)
-]
+    print("Q4: ", q4)
+    print("Q5: ", q5)
+    print("Q6: ", q6)
+    
 
-# Compute IK for each waypoint
-JOINT_WAYPOINTS = []
-for waypoint in CARTESIAN_WAYPOINTS:
-    try:
-        joint_angles = compute_ik(waypoint)
-        JOINT_WAYPOINTS.append(joint_angles)
-    except Exception as e:
-        print(f"Failed to compute IK for waypoint {waypoint}: {e}")
+    # Check that none of the angles are NaN
+    if np.isnan(q1) or np.isnan(q2) or np.isnan(q3) or np.isnan(q4) or np.isnan(q5) or np.isnan(q6):
+        return None
+    
+    return [q1, q2, q3, q4, q5, q6]
 
-# Print the computed joint waypoints
-print("Computed Joint Waypoints:")
-for i, joint_angles in enumerate(JOINT_WAYPOINTS):
-    print(f"Waypoint {i + 1}: {joint_angles}")
+
+def main():
+    # Example target position and orientation
+    target_position = np.array([0.5, 0.5, 0.5])  # Example position (x, y, z)
+    target_orientation_quat = [0, 0, 0, 1]  # Example quaternion (x, y, z, w)
+
+    # Convert quaternion to rotation matrix
+    target_orientation_matrix = Rotation.from_quat(target_orientation_quat).as_matrix()
+
+    print("Target Position:")
+    pprint(target_position)
+    print("Target Orientation (Rotation Matrix):")
+    pprint(target_orientation_matrix)
+
+    # Compute the IK solution
+    joint_angles = compute_ik(target_position, target_orientation_matrix)
+
+    if joint_angles is not None:
+        print("Computed Joint Angles:")
+        pprint(joint_angles)
+    else:
+        print("Failed to compute IK solution.")
+
+
+if __name__ == '__main__':
+    main()
