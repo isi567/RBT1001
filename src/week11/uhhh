@@ -90,8 +90,8 @@ def compute_ik(target_P, target_R, elbow_up=True):
 
 def main():
     # Example target position and orientation
-    target_position = np.array([0.011, -0.16, 0.175])  # Example position (x, y, z)
-    target_orientation_quat = [0, 0, 0, 1]  # Example quaternion (x, y, z, w)
+    target_position = np.array([0.03, -0.37, 0.0])  # Example position (x, y, z)
+    target_orientation_quat = [0.0, 0.0, 0.0, 1]  # Example quaternion (x, y, z, w)
 
     # Convert quaternion to rotation matrix
     target_orientation_matrix = Rotation.from_quat(target_orientation_quat).as_matrix()

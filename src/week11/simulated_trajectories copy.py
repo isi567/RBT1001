@@ -41,13 +41,18 @@ JOINT_WAYPOINTS = [
     #[-0.7853981633974483, -4.642334505560722, -3.2093547793489625, 0.0, 0.0, 0.0], # Move to the left
     #[0.0, -1.5707963267948983, -4.71238898038469, 0.0, 0.0, 0.0]                    # Return to the center
 
-    [-1.5, 0.0, 0.35, 0.0, 0.03, 0.0], 
-    [-1.5, 0.0, 0.0, 0.0, -0.03, 0.0], 
-    [-1.5, 0.0, -0.1, 0.0, -0.2, 0.0],
-    [1.5, 0.0, 0.0, 0.0, 0.0, 0.0],  # Turn 180 degrees for joint 1
-    [1.5, -0.04, -0.1, 0.0, 0.57, 0.0],
-    [1.5, 0.0, 0.0, 0.0, 0.0, 0.0],
-    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]               # Return to the initial position
+    #[-1.5, 0.0, 0.35, 0.0, 0.03, 0.0], 
+    #[-1.5, 0.0, 0.0, 0.0, -0.03, 0.0], 
+    #[-1.5, 0.0, -0.1, 0.0, -0.2, 0.0],
+    #[1.5, 0.0, 0.0, 0.0, 0.0, 0.0],  # Turn 180 degrees for joint 1
+    #[1.5, -0.04, -0.1, 0.0, 0.57, 0.0],
+    #[1.5, 0.0, 0.0, 0.0, 0.0, 0.0],
+    #[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]               # Return to the initial position
+
+
+    [-1.5021543377050626, -5.247120238092199, -0.2333262901119797, -3.141592653589793, 0.8027387789754076, -0.06864198908983399],
+    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
     
 ]
 
@@ -58,8 +63,8 @@ USE_CARTESIAN = False
 
 # Trapezoidal trajectory parameters
 MAX_CARTESIAN_VELOCITY = 1.0  # m/s
-SEGMENT_TIME = 6.0  # seconds per segment
-TICKS_PER_SEGMENT = 240  # number of points per segment
+SEGMENT_TIME = 2.0  # seconds per segment
+TICKS_PER_SEGMENT = 30  # number of points per segment
 
 # Simulation parameters
 ACTION_SERVER = '/joint_trajectory_controller/follow_joint_trajectory'
